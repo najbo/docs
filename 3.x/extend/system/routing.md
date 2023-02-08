@@ -31,7 +31,7 @@ $url = Url::to('api_acme_blog/cleanup_posts');
 
 ## Basic Routing
 
-To define routes, the PHP method will assocaite to the HTTP method, which supports `get`, `post`, `patch`, `put`, `options` and `delete`. The most basic routes simply accept a URI and a `Closure`.
+To define routes, the PHP method will associate to the HTTP method, which supports `get`, `post`, `patch`, `put`, `options` and `delete`. The most basic routes simply accept a URI and a `Closure`.
 
 ```php
 Route::get('/', function () {
@@ -71,7 +71,7 @@ Route::any('foo', function () {
 
 ## Routing to a Class
 
-For larger applications it is preferable to organize routes inside classes instead of a closure. The best place to put these classes is in the **handlers** directory. The route can be referenced as an array that takes the class name and method name. In this example the `/install` route is mapped to the `Installer` class and `install` method.
+For larger applications it is preferable to organize routes inside classes instead of a closure. The best place to put these classes is in the **handlers** directory. The route can be referenced as an array that takes the class name and method name. In this example the `/install` route is mapped to the `Installer` class and `index` method.
 
 ```php
 Route::any('/install', [Installer::class, 'index']);
