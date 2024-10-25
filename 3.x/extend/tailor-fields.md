@@ -12,7 +12,7 @@ Content Field definition classes reside inside the **contentfields** directory o
 |   ├── mycontentfield
 |   |   ├── assets
 |   |   └── partials
-|   |       └── _column_content.htm  _← Partial File_
+|   |       └── _column_content.php  _← Partial File_
 |   └── MyContentField.php  _← Field Class_
 :::
 
@@ -21,7 +21,7 @@ Content Field definition classes reside inside the **contentfields** directory o
 The `create:contentfield` command generates a content field class. The first argument specifies the author and plugin name. The second argument specifies the content field class name.
 
 ```bash
-php artisan create:contentfield Acme.Blog IconPicker
+php artisan create:contentfield Acme.Blog MyContentField
 ```
 
 The content field class must extend the `Backend\Classes\FormWidgetBase` class.
@@ -73,14 +73,8 @@ Assuming we want to include a field config item called `secondaryTitle`, it is f
 ```php
 class MyContentField extends ContentFieldBase
 {
-    /**
-     * @var string secondaryTitle for the field.
-     */
     public $secondaryTitle;
 
-    /**
-     * defineConfig will process the field configuration.
-     */
     public function defineConfig(array $config)
     {
         if (isset($config['secondaryTitle'])) {
@@ -164,6 +158,85 @@ public function extendDatabaseTable($table)
 {
     $table->mediumText($this->fieldName)->nullable();
 }
+```
+
+## Complete Usage Example
+
+Below is a complete example of creating a content field for the October Test plugin. It adds a `mycontentfield` type that is available to all blueprints, as shown in the example below.
+
+```yaml
+fields:
+    mycontentfield:
+        label: Custom Content Field
+        type: mycontentfield
+        firstColor: red
+        secondColor: blue
+```
+
+The field is registered in the file **plugins/october/test/Plugin.php** using the `registerContentFields` method.
+
+```php
+public function registerContentFields()
+{
+    return [
+        \October\Test\ContentFields\MyContentField::class => 'mycontentfield'
+    ];
+}
+```
+
+The field class is created in the file **plugins/october/test/contentfields/MyContentField.php** as a PHP class. It registers itself as a [partial field type](../element/form/ui-partial.md) does not include a list column or a filter scope for simplicity. The `addJsonable` method call ensures that the field name is a [jsonable property](../extend/system/models.md) so it can be stored as an array. The database column is stored as a `mediumText` [database schema type](../extend/database/structure.md) and with a `nullable` modifier, allowing empty values.
+
+```php
+namespace October\Test\ContentFields;
+
+use Tailor\Classes\ContentFieldBase;
+use October\Contracts\Element\FormElement;
+
+class MyContentField extends ContentFieldBase
+{
+    public function defineFormField(FormElement $form, $context = null)
+    {
+        $form->addFormField($this->fieldName, $this->label)
+            ->useConfig($this->config)
+            ->displayAs('partial')
+            ->path('$/october/test/contentfields/mycontentfield/partials/_field.php');
+    }
+
+    public function extendModelObject($model)
+    {
+        $model->addJsonable($this->fieldName);
+    }
+
+    public function extendDatabaseTable($table)
+    {
+        $table->mediumText($this->fieldName)->nullable();
+    }
+}
+```
+
+The file **plugins/october/test/contentfields/mycontentfield/partials/_field.php** contains the partial contents to render the form field. The values are retrieved and saved as an array `[first_value => 'foo', second_value => 'bar']`.
+
+```php
+<div class="row">
+    <div class="col">
+        <input
+            type="text"
+            name="<?= $field->getName() ?>[first_value]"
+            value="<?= e($field->value['first_value'] ?? '') ?>"
+            class="form-control"
+            style="color:<?= $field->firstColor ?: 'red' ?>"
+        />
+    </div>
+    <div class="col">
+        <input
+            type="text"
+            name="<?= $field->getName() ?>[second_value]"
+            value="<?= e($field->value['second_value'] ?? '') ?>"
+            class="form-control"
+            style="color:<?= $field->secondColor ?: 'blue' ?>"
+        />
+    </div>
+</div>
 ```
 
 #### See Also
