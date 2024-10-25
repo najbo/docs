@@ -27,11 +27,13 @@ When creating database-driven data sources, ensure that the dimension, dimension
 
 October CMS includes the following widget types:
 
-- Indicator: displays a single data source metric value, such as the total number of pageviews over the selected dashboard period.
-- Table: capable of displaying multiple dimension values and metrics, like product names, numbers of units sold, and total sales amount.
-- Chart: supports line and bar charts. In line charts, the horizontal axis shows dimension values, while the vertical axis shows metric values.
-- Section Title: Shows a static section title, such as 'Traffic Information'. This widget can also display the currently selected reporting interval.
-- Text Notice: contains a static title and paragraph text to present any information related to the dashboard.
+Type | Description
+------------- | -------------
+**Indicator** | displays a single data source metric value, such as the total number of pageviews over the selected dashboard period.
+**Table** | capable of displaying multiple dimension values and metrics, like product names, numbers of units sold, and total sales amount.
+**Chart** | supports line and bar charts. In line charts, the horizontal axis shows dimension values, while the vertical axis shows metric values.
+**Section Title** | Shows a static section title, such as 'Traffic Information'. This widget can also display the currently selected reporting interval.
+**Text Notice** | contains a static title and paragraph text to present any information related to the dashboard.
 
 ## Creating Default Plugin Dashboards
 
@@ -47,4 +49,3 @@ Dashboard::import($content, null, true);
 ```
 
 The second argument of the call should always be `null` for seeding purposes. The third argument specifies whether the dashboard should be accessible to all users. If set to `false`, the dashboard will be accessible only to users with dashboard management permissions.
-

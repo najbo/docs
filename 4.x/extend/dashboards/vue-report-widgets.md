@@ -17,30 +17,30 @@ In this documentation, we will create a simple component that displays the curre
 
 Dashboard widgets should be placed in the `vuecomponents` directory located in the root directory of a plugin, for example, `author/plugin/vuecomponents`. Each component must include a PHP file for server-side implementation, a JavaScript file for the Vue component, and a PHP file for the Vue template. Below is an example of the file structure for a widget. Note that the names of the CSS, JavaScript, and partial files are derived from the widget’s class file name:
 
-```
-authorname/
-  pluginname/
-    vuecomponents/
-      MyCustomWidget.php
-      mycustomwidget/
-        assets/
-          css/
-            mycustomwidget.css
-          js/
-            mycustomwidget.js
-        partials/
-          _mycustomwidget.php
-```
+::: dir
+├── `vuecomponents`
+|   ├── mycustomwidget
+|   |   └── assets
+|   |       └── css
+|   |           └── mycustomwidget.css  _← StyleSheet File_
+|   |       └── js
+|   |           └── mycustomwidget.js  _← JavaScript File_
+|   |   └── partials
+|   |       └── _mycustomwidget.php  _← Partial File_
+|   └── MyCustomWidget.php  _← Vue Widget Class_
+:::
 
 ### Server-Side Class
 
-The server code for a dashboard widget must define a class that extends `Backend\Classes\DashboardWidgetBase`. The only required method that a widget class needs to implement is `getData`. Below is the initial implementation of the class (MyCustomWidget.php):
+The server code for a dashboard widget must define a class that extends `Backend\Classes\VueReportWidgetBase`. The only required method that a widget class needs to implement is `getData`. Below is the initial implementation of the class (MyCustomWidget.php):
 
 ```php
-use Backend\Classes\DashboardWidgetBase;
+namespace Acme\MyPlugin\VueComponents;
+
+use Backend\Classes\VueReportWidgetBase;
 use Carbon\Carbon;
 
-class CustomWidget extends DashboardWidgetBase
+class MyCustomWidget extends VueReportWidgetBase
 {
     public function getData(
         array $widgetConfig,
@@ -127,20 +127,18 @@ Lastly, the template guides you on accessing server-provided data using the `ful
 Dashboard widgets must be registered in the plugin registration file (Plugin.php), within the `boot` method:
 
 ```php
-use Backend\Classes\DashboardWidgetManager;
-...
 public function boot()
 {
-    $widgetManager = DashboardWidgetManager::instance();
-    $widgetManager->registerWidget(
-        MyCustomWidget::class,
-        "Custom widget",
-        "Acme author"
-    );
+    \Backend\Classes\DashboardManager::instance()
+        ->registerVueReportWidget(
+            MyCustomWidget::class,
+            "Custom widget",
+            "Acme author"
+        );
 }
 ```
 
-The second and third arguments of the `registerWidget` method are the widget's name and the author's name. These will be displayed in the Dashboard user interface, particularly in the Create Widget menu. Once the widget is registered, you can add it to the dashboard:
+The second and third arguments of the `registerVueReportWidget` method are the widget's name and the author's name. These will be displayed in the Dashboard user interface, particularly in the Create Widget menu. Once the widget is registered, you can add it to the dashboard:
 
 ![image](https://raw.githubusercontent.com/octobercms/docs/develop/images/dashboards/adding-widget.webp)
 
@@ -185,9 +183,11 @@ onButtonClick: async function () {
             some_var: "some value"
         });
         this.buttonClickResult = response.result;
-    } catch (err) {
+    }
+    catch (err) {
         $.oc.alert(err.message);
-    } finally {
+    }
+    finally {
         this.loadingButtonData = false;
     }
 }
@@ -199,7 +199,7 @@ Finally, the server-side handler must be added to the widget's PHP class. Ensure
 protected function onGetSomeData(array $widgetConfig, array $extraData)
 {
     return [
-        "result" => rand(1, 100)
+        'result' => rand(1, 100)
     ];
 }
 ```

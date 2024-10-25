@@ -11,7 +11,7 @@ The report widget classes reside inside the **reportwidgets** directory of a plu
 ├── `reportwidgets`
 |   ├── trafficsources
 |   |   └── partials
-|   |       └── _widget.htm  _← Partial File_
+|   |       └── _widget.php  _← Partial File_
 |   └── TrafficSources.php  _← Widget Class_
 :::
 
