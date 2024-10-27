@@ -141,7 +141,7 @@ public function defineProperties()
 
 ## Report Widget Registration
 
-Plugins can register report widgets by overriding the `registerReportWidgets` method inside the [plugin registration file](../extending.md). The method should return an array containing the widget classes in the keys and widget configuration (label, context, and required permissions) in the values.
+Plugins can register report widgets by overriding the `registerReportWidgets` method inside the [plugin registration file](../extending.md). The method should return an array containing the widget classes in the keys and widget configuration (label, group, and required permissions) in the values.
 
 ```php
 public function registerReportWidgets()
@@ -149,14 +149,14 @@ public function registerReportWidgets()
     return [
         \RainLab\GoogleAnalytics\ReportWidgets\TrafficOverview::class => [
             'label' => 'Google Analytics traffic overview',
-            'context' => 'dashboard',
+            'group' => 'Widgets',
             'permissions' => [
                 'rainlab.googleanalytics.widgets.traffic_overview',
             ],
         ],
         \RainLab\GoogleAnalytics\ReportWidgets\TrafficSources::class => [
             'label' => 'Google Analytics traffic sources',
-            'context' => 'dashboard',
+            'group' => 'Widgets',
             'permissions' => [
                 'rainlab.googleanaltyics.widgets.traffic_sources',
             ],
@@ -165,4 +165,4 @@ public function registerReportWidgets()
 }
 ```
 
-The **label** element defines the widget name for the Add Widget popup window. The **context** element defines the context where the widget could be used. October's report widget system allows to host the report container on any page, and the container context name is unique. The widget container on the Dashboard page uses the **dashboard** context.
+The **label** element defines the widget name for the Add Widget popup window. The **group** element defines the menu item context where the widget can be selected.
