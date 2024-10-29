@@ -20,6 +20,7 @@ Property | Description
 **width** | image thumbnail width to use, optional.
 **height** | image thumbnail height to use, optional.
 **options** | [image resizer](../../extend/services/resizer.md) options.
+**limit** | the maximum number of images to display. Default: `3`
 
 Use the `sortable` property to disable sorting.
 
