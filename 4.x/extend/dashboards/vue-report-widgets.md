@@ -132,8 +132,7 @@ public function registerReportWidgets()
     return [
         \October\Test\VueComponents\MyCustomWidget::class => [
             'label' => 'Custom Widget',
-            'group' => 'Acme Author',
-            'vue' => true
+            'group' => 'Acme Author'
         ]
     ];
 }
