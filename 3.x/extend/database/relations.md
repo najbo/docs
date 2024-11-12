@@ -689,7 +689,7 @@ class Post extends Model
     ];
 }
 
-class Product extends Model
+class Video extends Model
 {
     public $morphMany = [
         'comments' => [\Acme\Blog\Models\Comment::class, 'name' => 'commentable']
